@@ -1,28 +1,24 @@
-# import pywhatkit
-# pywhatkit.sendwhatmsg('+8910255787','ola', 16,35)
 
-import numpy as np
-import cv2
-# import imutils
+#import the library files
 import os
-
 import cv2
 from matplotlib import pyplot as plt
 import numpy as np
 import imutils
 import easyocr
+#to_handle_exception
 try:
-   for root, dirs, files in os.walk("D:\projects\computer_vision\images", topdown=False):
-      for name in files:
-         x = os.path.join(root, name)
-         img = cv2.imread(x)
-         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-         # plt.imshow(cv2.cvtColor(gray, cv2.COLOR_BGR2RGB))
-         # plt.show()
+   for root, dirs, files in os.walk("#your_directory_name_here", topdown=False):
+      for name in files: #read_single_pic
+         x = os.path.join(root, name) #combine_dir_and_name
+         img = cv2.imread(x) # read files
+         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #change_to_grayscale
+         plt.imshow(cv2.cvtColor(gray, cv2.COLOR_BGR2RGB)) #visualise
+          plt.show()
          bfilter = cv2.bilateralFilter(gray, 11, 17, 17)  # Noise reduction
          edged = cv2.Canny(bfilter, 30, 200)  # Edge detection
-         # plt.imshow(cv2.cvtColor(edged, cv2.COLOR_BGR2RGB))
-         # plt.show()
+         plt.imshow(cv2.cvtColor(edged, cv2.COLOR_BGR2RGB)) #visualise
+         plt.show()
          keypoints = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)  # find_contours
          contours = imutils.grab_contours(keypoints)
          contours = sorted(contours, key=cv2.contourArea, reverse=True)[:10]
@@ -34,7 +30,7 @@ try:
                location = approx
                break
 
-         if type(location) == int:
+         if type(location) == int: #skip_those_files_which_are_not_giving_satisfactory_result
             pass
          else:
             print(type(location))
@@ -51,11 +47,8 @@ try:
             cropped_image = gray[x1:x2 + 1, y1:y2 + 1]
 
             text = []
-            reader = easyocr.Reader(['en'])
-            print(reader.readtext(cropped_image))
+            reader = easyocr.Reader(['en']) #character_recognition_text
+            print(reader.readtext(cropped_image))  #it_shows_the_extracted_text
 
 except:
    pass
-
-#for name in dirs:
-#print(os.path.join(root, name))
